@@ -5,7 +5,7 @@ import LoginForm from "../components/auth/LoginForm";
 
 export default function LoginPage() {
   return (
-    <body className="bg-white text-gray-800 overflow-hidden">
+    <div className="bg-white text-gray-800 overflow-hidden">
       <div className="flex min-h-screen">
         {/* Left side  */}
         <div className="hidden lg:flex lg:w-1/2 bg-primary flex-col justify-between p-12 relative">
@@ -55,6 +55,6 @@ export default function LoginPage() {
           </div>
         </div>
       </div>
-    </body>
+    </div>
   );
 }
