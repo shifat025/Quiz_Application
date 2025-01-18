@@ -1,26 +1,14 @@
+import Cookies from "js-cookie";
 import { useState } from "react";
 import { AuthContext } from "../context";
-import Cookies from 'js-cookie';
-
-const  getUserFromCookies = () => {
-  // Retrieve and parse the user data from cookies
-  const userCookie = Cookies.get("user");
-  
-  if (userCookie) {
-    return JSON.parse(userCookie);
-  }
-  
-  return null; // Return null if no user data is found
-};
-
 
 const AuthProvider = ({ children }) => {
-  
-  const [auth, setAuth] = useState(Cookies.get('authToken'));
-  console.log("this is", auth);
-  // Usage example
-  const user = getUserFromCookies();
-  console.log(user);
+  const [auth, setAuth] = useState({
+    authToken: Cookies.get("authToken"),
+    refreshToken: Cookies.get("refreshToken"),
+    user: Cookies.get("user") ? JSON.parse(Cookies.get("user")) : null,
+  });
+
   return (
     <AuthContext.Provider value={{ auth, setAuth }}>
       {children}
@@ -29,4 +17,3 @@ const AuthProvider = ({ children }) => {
 };
 
 export default AuthProvider;
-export {getUserFromCookies}

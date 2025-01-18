@@ -1,10 +1,9 @@
+import Cookies from "js-cookie";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { api } from "../../api";
 import useAuth from "../../hooks/useAuth";
 import Field from "../common/Field";
-import Cookies from "js-cookie";
-
 
 export default function LoginForm() {
   const navigate = useNavigate();
@@ -17,22 +16,35 @@ export default function LoginForm() {
   } = useForm();
 
   const submitForm = async (formData) => {
-    console.log(formData);
     try {
       const response = await api.post("/auth/login", formData);
 
       if (response.status === 200) {
         const { tokens, user } = response.data.data;
-        if (tokens) {
-          const authToken = tokens.accessToken;
-          // const refreshToken = tokens.refreshToken;
+        if (tokens && user) {
+          const { accessToken, refreshToken } = tokens;
+          
+          setAuth({ authToken: accessToken,refreshToken });
+          
+          Cookies.set("authToken", accessToken, {
+            secure: true,
+            sameSite: "Strict",
+          });
+          Cookies.set("refreshToken", refreshToken, {
+            secure: true,
+            sameSite: "Strict",
+          });
+          Cookies.set("user", JSON.stringify(user), {
+            secure: true,
+            sameSite: "Strict",
+          });
 
-          // console.log(`Login time auth token: ${authToken}`);
-          setAuth({  authToken });
-          Cookies.set("authToken", authToken, { secure: true, sameSite: "Strict" });
-          Cookies.set("user", JSON.stringify(user), { secure: true, sameSite: "Strict" });
-          // localStorage.setItem('authToken', JSON.stringify({ authToken }));
-          navigate("/");
+          if(user.role === "admin"){
+            navigate("/dashboard")
+          }else{
+            navigate("/");
+          }
+          
         }
       }
     } catch (error) {
@@ -56,7 +68,8 @@ export default function LoginForm() {
             errors.email ? "border-red-500" : "border-gray-200"
           }`}
           placeholder="Username or email address"
-          value="saad@learnwithsumit.com"
+          // value="saad@learnwithsumit.com"
+          value="admin@learnwithsumit.com"
         />
       </Field>
 
@@ -75,23 +88,11 @@ export default function LoginForm() {
           type="password"
           id="password"
           placeholder="Password"
-          value="password123"
+          // value="password123"
+          value="admin123"
         />
       </Field>
-      {/* <div className="mb-6">
-        <label htmlFor="role" className="flex gap-2 items-center">
-          <input
-            {...register("role")}
-            type="checkbox"
-            id="role"
-            className="px-4 py-3 rounded-lg border border-gray-300"
-          />
-          Login as Admin
-        </label>
-        {errors.role && (
-          <p className="text-red-500 text-sm mt-1">{errors.role.message}</p>
-        )}
-      </div> */}
+
 
       <button
         type="submit"

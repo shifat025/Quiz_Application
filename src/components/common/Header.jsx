@@ -9,6 +9,7 @@ export default function Header() {
 
   const handleLogout = () => {
     Cookies.remove("authToken", { secure: true, sameSite: "Strict" });
+    Cookies.remove("refreshToken", { secure: true, sameSite: "Strict" });
     Cookies.remove("user", { secure: true, sameSite: "Strict" });
 
     // Navigate to the login page
@@ -19,7 +20,7 @@ export default function Header() {
     <header className="flex justify-between items-center mb-12">
       <img src={Logo} className="h-7" />
       <div>
-        {!auth ? (
+        {!auth.authToken ? (
           <Link
             className="px-4 py-2 rounded hover:bg-primary hover:text-white transition-colors"
             style={{ fontFamily: "Jaro" }}

@@ -7,7 +7,7 @@ import RegisterForm from "../components/auth/RegisterForm";
 
 export default function RegisterPage() {
   return (
-    <body className="bg-white text-gray-800 ">
+    <main className="bg-white text-gray-800 ">
       <div className="flex min-h-screen max-h-screen">
         {/* Left side  */}
         <div className="hidden  lg:flex lg:w-1/2 bg-primary flex-col justify-between p-12  h-full fixed left-0 top-0">
@@ -55,6 +55,6 @@ export default function RegisterPage() {
           </div>
         </div>
       </div>
-    </body>
+    </main>
   );
 }

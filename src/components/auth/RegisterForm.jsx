@@ -1,5 +1,8 @@
 import { useForm } from "react-hook-form";
 import Field from "../common/Field";
+import { api } from "../../api";
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 export default function RegisterForm() {
   const {
@@ -8,8 +11,17 @@ export default function RegisterForm() {
     formState: { errors },
     setError,
   } = useForm();
+  const [loading, setLoading] = useState(false);
+  const [apiError, setApiError] = useState("");
+  const navigate = useNavigate();
 
-  const submitForm = (data) => {
+  const submitForm = async (data) => {
+    if (data.password !== data.confirm_password) {
+      setError("confirm_password", {
+        type: "manual",
+        message: "Passwords do not match",
+      });
+    }
     if (data.password !== data.confirm_password) {
       setError("confirm_password", {
         type: "manual",
@@ -18,10 +30,39 @@ export default function RegisterForm() {
     } else {
       const cleanedData = { ...data };
       delete cleanedData.confirm_password; // Remove confirm_password
-      cleanedData.role = data.role ? "admin" : "user"; // Assign role
-      console.log(cleanedData);
+      // Handle role assignment
+      if (data.role) {
+        cleanedData.role = "admin";
+      } else {
+        delete cleanedData.role; // Remove role if not admin
+      }
+
+      setLoading(true);
+      
+      try{
+        
+        const response = await api.post("auth/register", cleanedData)
+        
+        if(response.status === 201){
+          alert("Account created successfully!");
+          navigate("/login")
+        }
+      }
+      catch(error){
+        setApiError(
+          error.response?.data?.message ||
+            "An error occurred while registering. Please try again."
+        );
+      } finally {
+        setLoading(false);
+      }
+
     }
   };
+
+  if (loading) {
+    return <div>Loading...</div>;
+  }
 
   return (
     <form className="" onSubmit={handleSubmit(submitForm)}>
