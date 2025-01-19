@@ -64,6 +64,7 @@ export default function QuizAnswer({ quizData }) {
               const isCorrect = correctAnswer?.answer === option;
               const isSelected = submittedAnswer?.answer === option;
 
+              // option bg color
               const optionClass = isCorrect
                 ? "bg-green-100 text-green-600"
                 : isSelected && !isCorrect
@@ -79,21 +80,25 @@ export default function QuizAnswer({ quizData }) {
                 message = "This is the wrong answer that you selected.";
               }
 
+
+
               return (
-                <label
-                  key={index}
-                  className={`flex items-center space-x-3 p-2 rounded ${optionClass}`}
-                >
-                  <input
-                    type="radio"
-                    name={`question-${question.id}`}
-                    className="form-radio  text-buzzr-purple"
-                    checked={isSelected}
-                    readOnly
-                  />
-                  <span>{option}</span>
-                  {/* {message && <small className=" text-sm text-gray-500">{message}</small>} */}
-                </label>
+                <div key={index}>
+                  <label
+                    className={`flex items-center space-x-3 p-2 rounded ${optionClass}`}
+                  >
+                    <input
+                      type="radio"
+                      name={`question-${question.id}`}
+                      style={{ accentColor: isCorrect ? "green" : isSelected ? "red" : "gray" }}
+                      className="form-radio  text-buzzr-purple"
+                      checked={isSelected}
+                      readOnly
+                    />
+                    <span>{option}</span>
+                  </label>
+                  {message && <small className="block text-sm text-gray-500">{message}</small>}
+                </div>
               );
             })}
           </div>

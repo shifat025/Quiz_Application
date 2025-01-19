@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import avater from "../../assets/avater.webp";
 import useAuth from "../../hooks/useAuth";
 
@@ -6,14 +7,14 @@ export default function Position({
   onUserPosition,
   getOrdinalSuffix,
 }) {
-  const user = useAuth();
-  const userId = user?.id;
+  const {auth} = useAuth();
+  const userId = auth?.user?.id;
 
   if (!answersData || !answersData.attempts) {
     return <div>No data available</div>;
   }
 
-  const userScores = answersData.attempts.map((attempt) => {
+  const userScores = answersData?.attempts.map((attempt) => {
     // Find correct answers that match the user's submitted answers
     const correctAnswers = attempt.correct_answers.filter((correct) =>
       attempt.submitted_answers.some(
@@ -22,7 +23,7 @@ export default function Position({
           submitted.answer === correct.answer // Match answers
       )
     );
-    const totalMarks = correctAnswers.length * 5;
+    const totalMarks = correctAnswers ? correctAnswers.length * 5 : 0;
 
     return {
       id: attempt.user.id,
@@ -48,17 +49,21 @@ export default function Position({
     // Check if the current user's marks are less than the previous user's marks
     if (index > 0 && user.totalMarks < sortedScores[index - 1].totalMarks) {
       // If true, update the position to the current index + 1
-      position = index + 1;
+      position = position + 1;
     }
     return { ...user, position };
   });
 
   // Find the current user's position and call setUserPosition
-  const currentUser = userScoreWithPosition.find((u) => u.id === userId);
-  if (currentUser) {
-    onUserPosition(currentUser.position); // Update the user's position
-  }
+  const currentUser = userScoreWithPosition?.find((u) => u.id === userId);
 
+  useEffect(() =>{
+    if (currentUser) {
+      onUserPosition(currentUser?.position); // Update the user's position
+    }
+  },[currentUser, onUserPosition])
+
+  
   return (
     <div>
       <h1 className="text-2xl font-bold">Leaderboard</h1>

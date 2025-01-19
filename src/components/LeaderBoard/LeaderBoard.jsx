@@ -13,7 +13,9 @@ export default function LeaderBoard() {
   const [userPosition, setUserPosition] = useState(0);
   const { quizId } = useParams();
   const { loading, error } = FetchGetAttempts(quizId);
-  const user = useAuth();
+  const {auth} = useAuth();
+  const user = auth?.user
+
 
   const userAttemt = answersData?.attempts?.find(
     (attempt) => attempt.user.id === user?.id
@@ -29,6 +31,7 @@ export default function LeaderBoard() {
         correct.answer === answer.answer
     )
   );
+
 
   // Function to get the correct ordinal suffix (e.g., "st", "nd", "rd", "th") for a number
   const getOrdinalSuffix = (position) => {
