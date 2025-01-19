@@ -12,6 +12,7 @@ export default function Result() {
   const navigate = useNavigate();
   const { quizData, loading, error } = FetchQuizResult(quizId);
 
+
   if (loading) {
     return (
       <div className="flex justify-center items-center min-h-screen bg-background text-foreground">
@@ -39,8 +40,8 @@ export default function Result() {
           <div>
             <div className="text-white">
               <div>
-                <h2 className="text-4xl font-bold mb-2">{quizData.title}</h2>
-                <p>{quizData.description}</p>
+                <h2 className="text-4xl font-bold mb-2">{quizData?.title}</h2>
+                <p>{quizData?.description}</p>
               </div>
 
               <div className="my-6 flex items-center  ">

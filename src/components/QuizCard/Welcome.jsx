@@ -1,8 +1,10 @@
-import useUser from "../../hooks/useUser";
 import avater from "../../assets/avater.webp";
+import useAuth from "../../hooks/useAuth";
 
 export default function Welcome() {
-  const user = useUser();
+  const {auth} = useAuth();
+  const user = auth?.user
+
   return (
     <div className="text-center mb-12">
       <img

@@ -1,19 +1,17 @@
 import avater from "../../assets/avater.webp";
-import useUser from "../../hooks/useUser";
+import useAuth from "../../hooks/useAuth";
 
 export default function Position({
   answersData,
   onUserPosition,
   getOrdinalSuffix,
 }) {
-
-  const user = useUser();
+  const user = useAuth();
   const userId = user?.id;
 
   if (!answersData || !answersData.attempts) {
     return <div>No data available</div>;
   }
-
 
   const userScores = answersData.attempts.map((attempt) => {
     // Find correct answers that match the user's submitted answers
@@ -25,7 +23,6 @@ export default function Position({
       )
     );
     const totalMarks = correctAnswers.length * 5;
-    
 
     return {
       id: attempt.user.id,
@@ -36,14 +33,12 @@ export default function Position({
   });
 
   // Create a sorted copy of 'userScores' by total marks in descending order
-  const sortedScores = [...userScores].sort(
-    (a, b) =>{
-      if(b.totalMarks === a.totalMarks){
-        return b.originalIndex - a.originalIndex
-      }
-      return  b.totalMarks - a.totalMarks
+  const sortedScores = [...userScores].sort((a, b) => {
+    if (b.totalMarks === a.totalMarks) {
+      return b.originalIndex - a.originalIndex;
     }
-  );
+    return b.totalMarks - a.totalMarks;
+  });
 
   // Start the position counter at 1
   let position = 1;
@@ -57,7 +52,6 @@ export default function Position({
     }
     return { ...user, position };
   });
- 
 
   // Find the current user's position and call setUserPosition
   const currentUser = userScoreWithPosition.find((u) => u.id === userId);
@@ -86,7 +80,7 @@ export default function Position({
               <div>
                 <h3 className="font-semibold">{user.full_name}</h3>
                 <p className="text-sm text-gray-500">
-                  {user.position} 
+                  {user.position}
                   {getOrdinalSuffix(user.position)}
                 </p>
               </div>

@@ -5,6 +5,10 @@ import { useNavigate } from "react-router-dom";
 import { api } from "../api";
 import useAuth from "./useAuth";
 
+// Flags to handle token refresh
+let isRefreshing = false; // Prevent multiple simultaneous token refreshes
+let refreshPromise = null; // Promise for managing token refresh
+
 export const useAxios = () => {
   const { auth, setAuth } = useAuth();
   const navigate = useNavigate();
@@ -14,7 +18,6 @@ export const useAxios = () => {
     const requestIntercept = api.interceptors.request.use(
       (config) => {
         const authToken = auth?.authToken;
-        console.log("this is request auth", auth);
         if (authToken) {
           config.headers.Authorization = `Bearer ${authToken}`;
         }
@@ -24,63 +27,69 @@ export const useAxios = () => {
     );
 
     // Add a response intercepter
-
     const responseIntercept = api.interceptors.response.use(
-      (response) => response,
+      (response) => response, // Pass through successful responses
       async (error) => {
-        const orginalRequest = error.config;
+        const orginalRequest = error.config; // Original request causing error
         if (error.response?.status === 401 && !orginalRequest._retry) {
           orginalRequest._retry = true;
 
+          // Ensure only one refresh request at a time
+          if (!isRefreshing) {
+            isRefreshing = true;
+            refreshPromise = refreshAccessToken(auth, setAuth, navigate);
+          }
+
           try {
-            const userRefreshToken = auth?.refreshToken;
-            const response = await axios.post(
-              `${import.meta.env.VITE_SERVER_BASE_URL}/auth/refresh-token`,
-              { refreshToken: userRefreshToken }
-            );
+            const accessToken = await await refreshPromise; // Wait for token refresh
 
-            const { accessToken, refreshToken } = response.data.data;
-            console.log("new access token", accessToken);
-            console.log("new refresh token", refreshToken);
-            setAuth({ ...auth, authToken: accessToken, refreshToken });
-            console.log("this is response auth", auth);
+            orginalRequest.headers.Authorization = `Bearer ${accessToken}`; // Retry request with new token
 
-            // Update cookies
-            Cookies.set("authToken", accessToken, {
-              secure: true,
-              sameSite: "Strict",
-            });
-            Cookies.set("refreshToken", refreshToken, {
-              secure: true,
-              sameSite: "Strict",
-            });
-
-            orginalRequest.headers.Authorization = `Bearer ${accessToken}`;
-
-            return axios(orginalRequest);
+            return axios(orginalRequest); // Retry the original request
           } catch (error) {
-            console.log(
-              "This is refresh response",
-              error.response.data.message
-            );
             console.error("Failed to refresh token:", error);
-
-            // Navigate to the login page
-            Cookies.remove("authToken");
-            Cookies.remove("refreshToken");
-            Cookies.remove("user");
-            navigate("/login");
-            throw error;
+            throw error; // Propagate error if refresh fails
+          } finally {
+            isRefreshing = false;
+            refreshPromise = null; // Reset refresh state
           }
         }
-        return Promise.reject(error);
+        return Promise.reject(error); // Return configured Axios instance
       }
     );
     return () => {
       api.interceptors.request.eject(requestIntercept);
       api.interceptors.response.eject(responseIntercept);
     };
-  }, [auth, setAuth]);
+  }, [auth, setAuth, navigate]);
 
   return { api };
+};
+
+// Function to refresh access token
+const refreshAccessToken = async (auth, setAuth, navigate) => {
+  try {
+    const response = await axios.post(
+      `${import.meta.env.VITE_SERVER_BASE_URL}/auth/refresh-token`,
+      { refreshToken: auth?.refreshToken }
+    );
+
+    const { accessToken, refreshToken } = response.data.data;
+
+    // Update auth state and cookies
+    setAuth({ ...auth, authToken: accessToken, refreshToken });
+    Cookies.set("authToken", accessToken, { secure: true, sameSite: "Strict" });
+    Cookies.set("refreshToken", refreshToken, {
+      secure: true,
+      sameSite: "Strict",
+    });
+
+    return accessToken;
+  } catch (error) {
+    Cookies.remove("authToken");
+    Cookies.remove("refreshToken");
+    Cookies.remove("user");
+    navigate("/login");
+    throw error;
+  }
 };

@@ -18,10 +18,13 @@ export default function QuizQuestions({ quiz, onRemainingQuestions }) {
 
   // Total question lenth and track how many quiz i checked
   const totalQuestions = quiz?.questions?.length;
-  const totalRemaining = onRemainingQuestions(
-    totalQuestions - currentQuestionIndex
-  );
+  useEffect(() => {
+    if (onRemainingQuestions) {
+      onRemainingQuestions(totalQuestions - currentQuestionIndex);
+    }
+  }, [currentQuestionIndex]);
 
+  
   // For rotate quiz option
   const currentQuestion = quiz?.questions[currentQuestionIndex] || null;
   const shuffleOptions = () => {

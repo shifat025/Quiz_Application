@@ -8,6 +8,7 @@ const AuthProvider = ({ children }) => {
     refreshToken: Cookies.get("refreshToken"),
     user: Cookies.get("user") ? JSON.parse(Cookies.get("user")) : null,
   });
+  // console.log(auth?.user);
 
   return (
     <AuthContext.Provider value={{ auth, setAuth }}>

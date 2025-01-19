@@ -17,7 +17,7 @@ import Draft from "../components/Admin/Dashboard/Draft";
 export default function Routing() {
   return (
     <Routes>
-      <Route element={<PrivateRoutes />}>
+      <Route element={<PrivateRoutes role='user' />}>
         <Route element={<QuizPage />} path="/quiz_page/:quizId" />
         <Route element={<Result />} path="/quiz_page/:quizId/result" />
         <Route

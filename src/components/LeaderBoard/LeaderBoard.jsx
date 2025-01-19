@@ -2,9 +2,8 @@ import { useState } from "react";
 import { useParams } from "react-router-dom";
 import avater from "../../assets/avater.webp";
 import FetchGetAttempts from "../../features/attempts/getAttempt";
-import { useAxios } from "../../hooks/useAxios";
+import useAuth from "../../hooks/useAuth";
 import useGetAttempts from "../../hooks/useGetAttempts";
-import useUser from "../../hooks/useUser";
 import Header from "../common/Header";
 import Position from "./Position";
 
@@ -14,7 +13,7 @@ export default function LeaderBoard() {
   const [userPosition, setUserPosition] = useState(0);
   const { quizId } = useParams();
   const { loading, error } = FetchGetAttempts(quizId);
-  const user = useUser();
+  const user = useAuth();
 
   const userAttemt = answersData?.attempts?.find(
     (attempt) => attempt.user.id === user?.id

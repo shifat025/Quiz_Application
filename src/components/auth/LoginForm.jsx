@@ -24,7 +24,7 @@ export default function LoginForm() {
         if (tokens && user) {
           const { accessToken, refreshToken } = tokens;
           
-          setAuth({ authToken: accessToken,refreshToken });
+          setAuth({ authToken: accessToken,refreshToken , user});
           
           Cookies.set("authToken", accessToken, {
             secure: true,
@@ -68,8 +68,8 @@ export default function LoginForm() {
             errors.email ? "border-red-500" : "border-gray-200"
           }`}
           placeholder="Username or email address"
-          // value="saad@learnwithsumit.com"
-          value="admin@learnwithsumit.com"
+          value="saad@learnwithsumit.com"
+          // value="admin@learnwithsumit.com"
         />
       </Field>
 
@@ -88,8 +88,8 @@ export default function LoginForm() {
           type="password"
           id="password"
           placeholder="Password"
-          // value="password123"
-          value="admin123"
+          value="password123"
+          // value="admin123"
         />
       </Field>
 

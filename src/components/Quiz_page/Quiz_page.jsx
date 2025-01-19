@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useParams } from "react-router-dom";
 import avater from "../../assets/avater.webp";
 import { useFetchQuiz } from "../../features/quizQuestion/quizz";
-import useUser from "../../hooks/useUser";
+import useAuth from "../../hooks/useAuth";
 import Footer from "../common/Footer";
 import Header from "../common/Header";
 import QuizQuestions from "./Quiz_Questions";
@@ -12,7 +12,7 @@ export default function QuizPage() {
   const { quizData, loading, error } = useFetchQuiz(quizId);
   const [remainingQuestions, setRemainingQuestions] = useState();
 
-  const user = useUser();
+  const user = useAuth();
 
   if (loading) {
     return (
@@ -70,7 +70,7 @@ export default function QuizPage() {
 
             <QuizQuestions
               quiz={quizData}
-              onRemainingQuestions={setRemainingQuestions}
+              onRemainingQuestions={(count) => setRemainingQuestions(count)}
             />
           </div>
         </main>

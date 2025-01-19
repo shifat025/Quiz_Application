@@ -1,7 +1,9 @@
 import { useParams } from "react-router-dom";
 import FetchGetAttempts from "../../features/attempts/getAttempt";
+
+import { useEffect } from "react";
+import useAuth from "../../hooks/useAuth";
 import useGetAttempts from "../../hooks/useGetAttempts";
-import useUser from "../../hooks/useUser";
 
 export default function QuizAnswer({ quizData }) {
   const {
@@ -9,18 +11,21 @@ export default function QuizAnswer({ quizData }) {
     setTotalQuestion,
     setCorrectAnswer,
   } = useGetAttempts();
-
   const { quizId } = useParams();
   const { loading, error } = FetchGetAttempts(quizId);
-  const user = useUser();
+  const { auth } = useAuth();
+  const user = auth?.user;
 
+  // Finding the user's attempt from the fetched data
   const userAttemt = answersData?.attempts?.find(
     (attempt) => attempt.user.id === user?.id
   );
 
+  // Extracting submitted and correct answers from the user's attempt
   const submittedData = userAttemt?.submitted_answers || [];
   const correctAnswers = userAttemt?.correct_answers || [];
 
+  // Filtering correct answers from the submitted answers
   const correctAnswer = submittedData.filter((answer) =>
     correctAnswers.some(
       (correct) =>
@@ -28,9 +33,14 @@ export default function QuizAnswer({ quizData }) {
         correct.answer === answer.answer
     )
   );
-  setCorrectAnswer(correctAnswer.length);
-  setTotalQuestion(answersData?.quiz?.total_questions);
 
+  // Setting total questions and correct answers count using state setters
+  useEffect(() => {
+    setCorrectAnswer(correctAnswer.length);
+    setTotalQuestion(answersData?.quiz?.total_questions);
+  }, [correctAnswer.length, answersData?.quiz?.total_questions]);
+
+  // Mapping through quiz questions to display each question and options
   const questionElements = quizData?.questions?.map((question, index) => {
     const submittedAnswer = submittedData.find(
       (answer) => answer.question_id === question.id
