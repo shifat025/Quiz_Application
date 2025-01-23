@@ -12,9 +12,9 @@ const FetchQuizResult = (quizId) => {
       try {
         setLoading(true);
         setError(null); // Reset error before new request
-        const response = await api.get(`/quizzes/${quizId}`);
+        const response = await api.get(`/quizzes/${quizId}/`);
         if (response.status === 200) {
-          setQuizData(response.data.data);
+          setQuizData(response.data);
         } else {
           throw new Error("Failed to fetch quiz data");
         }

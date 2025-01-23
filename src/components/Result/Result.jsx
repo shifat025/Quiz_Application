@@ -12,7 +12,7 @@ export default function Result() {
   const navigate = useNavigate();
   const { quizData, loading, error } = FetchQuizResult(quizId);
 
-
+  console.log("this is result", quizData);
   if (loading) {
     return (
       <div className="flex justify-center items-center min-h-screen bg-background text-foreground">

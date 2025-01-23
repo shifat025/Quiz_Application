@@ -115,7 +115,7 @@ export default function QuizSet() {
                   required
                 >
                   <option value="draft">Draft</option>
-                  <option value="Published">Published</option>
+                  <option value="published">Published</option>
                 </select>
               </div>
             )}

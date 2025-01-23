@@ -11,7 +11,6 @@ export default function QuestionEntry() {
   const [selectedQuestion, setSelectedQuestion] = useState(null);
   const quizSetId = useParams().quizSetId;
 
-
   useEffect(() => {
     if (quizListData) {
       const matchedQuizset = quizListData?.find(
@@ -21,7 +20,6 @@ export default function QuestionEntry() {
       setQuestions(questions);
     }
   }, [quizListData, quizSetId]);
-
 
   if (error) {
     return (

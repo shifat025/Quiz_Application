@@ -11,6 +11,7 @@ export default function QuizPage() {
   const { quizId } = useParams(); // Get quizId from the URL
   const { quizData, loading, error } = useFetchQuiz(quizId);
   const [remainingQuestions, setRemainingQuestions] = useState();
+  console.log(quizData);
 
   const user = useAuth();
 
@@ -43,7 +44,7 @@ export default function QuizPage() {
 
                 <div className="flex flex-col">
                   <div className="w-fit bg-green-100 text-green-800 text-sm font-medium px-2.5 py-0.5 rounded-full inline-block mb-2">
-                    Total number of questions : {quizData?.stats?.total_marks}
+                    Total number of questions : {quizData?.questions?.length}
                   </div>
 
                   <div className="w-fit bg-blue-100 text-blue-800 text-sm font-medium px-2.5 py-0.5 rounded-full inline-block mb-2">

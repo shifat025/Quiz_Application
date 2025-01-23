@@ -73,7 +73,8 @@ export default function QuizQuestions({ quiz, onRemainingQuestions }) {
   const handleSubmitQuiz = async () => {
     setIsSubmitting(true);
     try {
-      const response = await api.post(`quizzes/${quizId}/attempt`, {answers:selectedAnswers });
+      const response = await api.post(`submit-quiz/${quizId}/`, {answers:selectedAnswers });
+      console.log(response.status);
       if (response.status === 200) {
         navigate(`/quiz_page/${quizId}/result`);
       }

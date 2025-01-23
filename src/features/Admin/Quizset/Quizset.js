@@ -54,8 +54,8 @@ export function QuizSetApi() {
     try {
       setLoading(true);
       setError(null); // Reset error before request
-      const response = await api.delete(`admin/quizzes/${quizSetId}`);
-      if (response.status === 200) {
+      const response = await api.delete(`/admins/quizsets/${quizSetId}/delete/`);
+      if (response.status === 204) {
         return true;
       } else {
         throw new Error("Failed to delete question set");

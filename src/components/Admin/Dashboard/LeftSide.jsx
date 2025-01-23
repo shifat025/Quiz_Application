@@ -50,7 +50,7 @@ export default function LeftSide() {
               Draft Quizset
             </Link>
           </li>
-          <li>
+          {/* <li>
             <Link
               onClick={() => handleLinkClick(3)}
               className={`block py-2 px-4 rounded-lg ${
@@ -85,7 +85,7 @@ export default function LeftSide() {
             >
               Manage Roles
             </Link>
-          </li>
+          </li> */}
           <li>
             <Link
               onClick={handleLogout}

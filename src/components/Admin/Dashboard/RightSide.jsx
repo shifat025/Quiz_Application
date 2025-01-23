@@ -5,6 +5,7 @@ import DeleteIcon from "../../../assets/icons/delete.png";
 import EditIcon from "../../../assets/icons/icons8-edit-128.png";
 import FetchQuizList from "../../../features/Admin/QuizList/QuizList";
 import { QuizSetApi } from "../../../features/Admin/Quizset/Quizset";
+import { ToastContainer, toast } from "react-toastify";
 
 export default function RightSide({ statusFilter }) {
   const navigate = useNavigate();
@@ -26,9 +27,12 @@ export default function RightSide({ statusFilter }) {
         setQuizset((prev) =>
           prev.filter((questionSet) => questionSet.id !== questionSetId)
         );
+        toast.success("Question set deleted successfully!");
+      } else {
+        toast.error("Failed to delete question set.");
       }
     } catch (err) {
-      console.log(err);
+      toast.error("An error occurred while deleting the question set.");
     }
   };
 
@@ -97,7 +101,11 @@ export default function RightSide({ statusFilter }) {
           <div
             key={quiz.id}
             className="bg-white p-6 rounded-lg shadow-sm border border-gray-200 group cursor-pointer w-96 max-w-full relative"
-            onClick={() => navigate(`/dashboard/quizentry/${quiz.id}`,{ state: { title: quiz.title, description: quiz.description } })}
+            onClick={() =>
+              navigate(`/dashboard/quizentry/${quiz.id}`, {
+                state: { title: quiz.title, description: quiz.description },
+              })
+            }
           >
             <div
               className="absolute top-2 right-2 "

@@ -18,11 +18,11 @@ export const useFetchQuizzes = () => {
         setLoading(true);
         setError(null); // Reset error before a new request
         const response = auth?.authToken
-          ? await api.get("/quizzes")
-          : await baseurl.get("/quizzes");
-
+          ? await api.get("/user_set/")
+          : await baseurl.get("/user_set/");
+        console.log(response);
         if (response.status === 200) {
-          setQuizzes(response.data.data);
+          setQuizzes(response.data);
         } else {
           throw new Error(`Error: Received status code ${response.status}`);
         }
