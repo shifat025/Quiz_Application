@@ -22,13 +22,6 @@ export default function QuestionEntry() {
     }
   }, [quizListData, quizSetId]);
 
-  if (loading) {
-    return (
-      <div className="flex justify-center items-center min-h-screen bg-background text-foreground">
-        <p>Loading...</p>
-      </div>
-    );
-  }
 
   if (error) {
     return (
@@ -74,6 +67,7 @@ export default function QuestionEntry() {
             setIsEdit={setIsEdit}
             edit={isEdit}
             selectedQuestion={selectedQuestion}
+            questions={questions}
           />
 
           {/* <!-- Right Column --> */}
@@ -84,6 +78,7 @@ export default function QuestionEntry() {
             edit={isEdit}
             setSelectedQuestion={setSelectedQuestion}
             selectedQuestion={selectedQuestion}
+            loading={loading}
           />
         </div>
       </div>

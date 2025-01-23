@@ -13,7 +13,6 @@ export default function RightSide({ statusFilter }) {
   const { quizListData, loading, error } = FetchQuizList();
   const { deleteQuestionSet } = QuizSetApi();
 
-
   useEffect(() => {
     if (quizListData) {
       setQuizset(quizListData);
@@ -36,7 +35,10 @@ export default function RightSide({ statusFilter }) {
   if (loading) {
     return (
       <div className="flex justify-center items-center min-h-screen bg-background text-foreground">
-        <p>Loading...</p>
+        <div className="relative w-12 h-12">
+          <div className="absolute inset-0 border-4 border-gray-200 rounded-full"></div>
+          <div className="absolute inset-0 border-4 border-t-primary border-r-transparent border-b-transparent border-l-primary rounded-full animate-spin"></div>
+        </div>
       </div>
     );
   }
@@ -62,38 +64,40 @@ export default function RightSide({ statusFilter }) {
       </header>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-      {statusFilter !== "draft" && <Link to="quizset" className="group">
-        <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-200 ">
-          <div className="text-buzzr-purple mb-4 group-hover:scale-105 transition-all">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              className="h-8 w-8"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth="2"
-                d="M12 4v16m8-8H4"
-              />
-            </svg>
-          </div>
-          <h3 className="font-semibold text-lg mb-2 group-hover:scale-105 transition-all">
-            Create a new quiz
-          </h3>
-          <p className="text-gray-600 text-sm group-hover:scale-105 transition-all">
-            Build from the ground up
-          </p>
-        </div>
-      </Link>}
+        {statusFilter !== "draft" && (
+          <Link to="quizset" className="group">
+            <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-200 ">
+              <div className="text-buzzr-purple mb-4 group-hover:scale-105 transition-all">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="h-8 w-8"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth="2"
+                    d="M12 4v16m8-8H4"
+                  />
+                </svg>
+              </div>
+              <h3 className="font-semibold text-lg mb-2 group-hover:scale-105 transition-all">
+                Create a new quiz
+              </h3>
+              <p className="text-gray-600 text-sm group-hover:scale-105 transition-all">
+                Build from the ground up
+              </p>
+            </div>
+          </Link>
+        )}
 
         {filteredQuizzes?.map((quiz) => (
           <div
             key={quiz.id}
             className="bg-white p-6 rounded-lg shadow-sm border border-gray-200 group cursor-pointer w-96 max-w-full relative"
-            onClick={() => navigate(`/dashboard/quizentry/${quiz.id}`)}
+            onClick={() => navigate(`/dashboard/quizentry/${quiz.id}`,{ state: { title: quiz.title, description: quiz.description } })}
           >
             <div
               className="absolute top-2 right-2 "

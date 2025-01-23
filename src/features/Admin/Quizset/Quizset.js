@@ -12,11 +12,11 @@ export function QuizSetApi() {
       setLoading(true);
       setError(null); // Reset error before request
       const response = await api.post(
-        `admin/quizzes/`,
+        `/admins/quizsets/create/`,
         data
       );
       if (response.status === 201) {
-        return response.data.data;
+        return response.data;
       } else {
         throw new Error("Failed to create question");
       }
@@ -33,11 +33,11 @@ export function QuizSetApi() {
       setLoading(true);
       setError(null); // Reset error before request
       const response = await api.patch(
-        `admin/quizzes/${quizSetId}`,
+        `/admins/quizsets/${quizSetId}/update/`,
         data
       );
       if (response.status === 200) {
-        return response.data.data;
+        return response.data;
       } else {
         throw new Error("Failed to update question set");
       }

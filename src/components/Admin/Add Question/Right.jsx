@@ -1,4 +1,5 @@
 import { useParams } from "react-router-dom";
+import { toast } from "react-toastify";
 import { CreateUpdateQuestion } from "../../../features/Admin/NewQuestionList/CreateUpdateQuestion";
 
 export default function QuestionList({
@@ -8,9 +9,10 @@ export default function QuestionList({
   setIsEdit,
   setSelectedQuestion,
   selectedQuestion,
+  loading,
 }) {
   const quizSetId = useParams().quizSetId;
-  const { deleteQuestion, loading, error } = CreateUpdateQuestion(quizSetId);
+  const { deleteQuestion, error } = CreateUpdateQuestion(quizSetId);
 
   const deleteQuestionHandler = async (questionId) => {
     const success = await deleteQuestion(questionId);
@@ -18,8 +20,22 @@ export default function QuestionList({
       setQuestions((prev) =>
         prev.filter((question) => question.id !== questionId)
       );
+      toast.success("Question deleted successfully!");
+    } else {
+      toast.error("Failed to delete the question.");
     }
   };
+
+  if (loading) {
+    return (
+      <div className="flex justify-center items-center  bg-background text-foreground">
+        <div className="relative w-12 h-12">
+          <div className="absolute inset-0 border-4 border-gray-200 rounded-full"></div>
+          <div className="absolute inset-0 border-4 border-t-primary border-r-transparent border-b-transparent border-l-primary rounded-full animate-spin"></div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="px-4">
@@ -46,7 +62,7 @@ export default function QuestionList({
                     type="radio"
                     name={`answer-${questionIndex}`}
                     className="form-radio text-buzzr-purple"
-                    checked={question.correctAnswer === option}
+                    checked={question.correct_answer === option}
                   />
 
                   <span>{option}</span>

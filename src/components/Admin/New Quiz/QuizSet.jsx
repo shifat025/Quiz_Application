@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 import { QuizSetApi } from "../../../features/Admin/Quizset/Quizset";
 import { useAxios } from "../../../hooks/useAxios";
 
@@ -8,7 +9,8 @@ export default function QuizSet() {
   const quiz = location.state?.quiz;
   const navigate = useNavigate();
   const { api } = useAxios();
-  const { createQuizSet, updateQuizSet,deleteQuestionSet, error, loading } = QuizSetApi();
+  const { createQuizSet, updateQuizSet, deleteQuestionSet, error, loading } =
+    QuizSetApi();
   const [quizSetData, setQuizSetData] = useState({
     status: "",
     title: "",
@@ -40,10 +42,10 @@ export default function QuizSet() {
         // Update existing quiz
         const updatedQuiz = await updateQuizSet(quiz.id, quizSetData);
         if (updatedQuiz) {
+          toast.success("Quiz updated successfully!");
           navigate(-1); // Navigate back after successful update
         } else {
-          // throw new Error("Failed to update the quizset");
-          console.log("this is adfasdf", error);
+          toast.error("Failed to update the quizset.");
         }
       } else {
         // Create new quiz
@@ -53,19 +55,18 @@ export default function QuizSet() {
           description,
         });
         if (createdQuiz) {
+          toast.success("Quiz created successfully!");
           navigate(`/dashboard/quizentry/${createdQuiz.id}`); // Navigate to new quiz entry page
         } else {
-          throw new Error("Failed to create the quizset");
+          toast.error("Failed to create the quizset.");
         }
       }
     } catch (err) {
-      console.log("this is component error", err);
+      // console.log("this is component error", err);
+      toast.error("An error occurred. Please try again.");
       // console.log("This is update error", err.response.data.message);
- 
     }
   };
-
-  
 
   return (
     <main className="md:flex-grow px-4 sm:px-6 lg:px-8 py-8">
@@ -114,7 +115,7 @@ export default function QuizSet() {
                   required
                 >
                   <option value="draft">Draft</option>
-                  <option value="published">Published</option>
+                  <option value="Published">Published</option>
                 </select>
               </div>
             )}
@@ -158,9 +159,23 @@ export default function QuizSet() {
 
             <button
               type="submit"
-              className="w-full block text-center bg-primary text-white py-2 px-4 rounded-md hover:bg-primary/90 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary"
+              className={`w-full block text-center py-2 px-4 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 ${
+                loading
+                  ? "bg-gray-400 text-gray-700 cursor-not-allowed"
+                  : "bg-primary text-white hover:bg-primary/90 focus:ring-primary"
+              }`}
+              disabled={loading}
             >
-              {quiz ? "Update" : "Next"}
+              {loading ? (
+                <div className="flex justify-center items-center">
+                  <div className="w-5 h-5 border-4 border-gray-300 border-t-primary rounded-full animate-spin mr-2"></div>
+                  <span>Loading...</span>
+                </div>
+              ) : quiz ? (
+                "Update"
+              ) : (
+                "Next"
+              )}
             </button>
           </form>
         </div>

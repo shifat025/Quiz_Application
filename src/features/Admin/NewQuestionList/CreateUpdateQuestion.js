@@ -11,12 +11,14 @@ export function CreateUpdateQuestion(quizSetId) {
     try {
       setLoading(true);
       setError(null); // Reset error before request
+      console.log(entryData);
       const response = await api.post(
-        `admin/quizzes/${quizSetId}/questions`,
+        `admins/quizsets/${quizSetId}/questions/`,
         entryData
       );
       if (response.status === 201) {
-        return response.data.data;
+        console.log(response.data);
+        return response.data;
       } else {
         throw new Error("Failed to create question");
       }
@@ -33,11 +35,11 @@ export function CreateUpdateQuestion(quizSetId) {
       setLoading(true);
       setError(null); // Reset error before request
       const response = await api.patch(
-        `admin/questions/${questionId}`,
+        `admins/questions/${questionId}/update/`,
         entryData
       );
       if (response.status === 200) {
-        return response.data.data;
+        return response.data;
       } else {
         throw new Error("Failed to update question");
       }
@@ -53,13 +55,14 @@ export function CreateUpdateQuestion(quizSetId) {
     try {
       setLoading(true);
       setError(null); // Reset error before request
-      const response = await api.delete(`admin/questions/${questionId}`);
-      if (response.status === 200) {
+      const response = await api.delete(`/admins/questions/${questionId}/delete/`);
+      if (response.status === 204) {
         return true;
       } else {
         throw new Error("Failed to delete question");
       }
     } catch (err) {
+      console.log("delete error",err);
       setError(err.message || "Something went wrong");
       return false;
     } finally {

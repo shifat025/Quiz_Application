@@ -12,7 +12,7 @@ const FetchQuizList = () => {
       try {
         setLoading(true);
         setError(null); // Reset error before new request
-        const response = await api.get("/admin/quizzes");
+        const response = await api.get("/admins/quizsets/");
         if (response.status === 200) {
           setQuizListData(response.data);
         } else {

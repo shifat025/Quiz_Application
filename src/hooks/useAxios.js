@@ -70,21 +70,21 @@ export const useAxios = () => {
 const refreshAccessToken = async (auth, setAuth, navigate) => {
   try {
     const response = await axios.post(
-      `${import.meta.env.VITE_SERVER_BASE_URL}/auth/refresh-token`,
-      { refreshToken: auth?.refreshToken }
+      `${import.meta.env.VITE_SERVER_BASE_URL}/user/token/refresh/`,
+      { refresh: auth?.refreshToken }
     );
 
-    const { accessToken, refreshToken } = response.data.data;
+    const { access, refresh } = response.data;
 
     // Update auth state and cookies
-    setAuth({ ...auth, authToken: accessToken, refreshToken });
-    Cookies.set("authToken", accessToken, { secure: true, sameSite: "Strict" });
-    Cookies.set("refreshToken", refreshToken, {
+    setAuth({ ...auth, authToken: access, refreshToken: refresh });
+    Cookies.set("authToken", access, { secure: true, sameSite: "Strict" });
+    Cookies.set("refreshToken", refresh, {
       secure: true,
       sameSite: "Strict",
     });
 
-    return accessToken;
+    return access;
   } catch (error) {
     Cookies.remove("authToken");
     Cookies.remove("refreshToken");
