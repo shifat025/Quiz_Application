@@ -43,7 +43,10 @@ export default function LeaderBoard() {
   if (loading) {
     return (
       <div className="flex justify-center items-center min-h-screen bg-background text-foreground">
-        <p>Loading...</p>
+        <div className="relative w-12 h-12">
+          <div className="absolute inset-0 border-4 border-gray-200 rounded-full"></div>
+          <div className="absolute inset-0 border-4 border-t-primary border-r-transparent border-b-transparent border-l-primary rounded-full animate-spin"></div>
+        </div>
       </div>
     );
   }

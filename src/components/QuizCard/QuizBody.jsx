@@ -2,10 +2,10 @@ import { useNavigate } from "react-router-dom";
 import { useFetchQuizzes } from "../../features/homeQuiz/quizzes";
 import useAuth from "../../hooks/useAuth";
 
-export default function QuizBody() {
+export default function QuizBody({quizzes, loading, error}) {
   const { auth } = useAuth();
   const navigate = useNavigate();
-  const { quizzes, loading, error } = useFetchQuizzes();
+  // const { quizzes, loading, error } = useFetchQuizzes();
 
   const handleQuizClick = (quizId, isAttempted) => {
     if (auth?.authToken) {
@@ -19,16 +19,7 @@ export default function QuizBody() {
     }
   };
 
-  if (loading) {
-    return (
-      <div className="flex justify-center items-center min-h-screen bg-background text-foreground">
-        <div className="relative w-12 h-12">
-          <div className="absolute inset-0 border-4 border-gray-200 rounded-full"></div>
-          <div className="absolute inset-0 border-4 border-t-primary border-r-transparent border-b-transparent border-l-primary rounded-full animate-spin"></div>
-        </div>
-      </div>
-    );
-  }
+ 
   if (error) return <div>Error: {error}</div>;
 
   return (
