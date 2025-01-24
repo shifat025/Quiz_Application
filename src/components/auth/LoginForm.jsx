@@ -2,6 +2,7 @@ import Cookies from "js-cookie";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 import { api } from "../../api";
 import useAuth from "../../hooks/useAuth";
 import Field from "../common/Field";
@@ -15,6 +16,7 @@ export default function LoginForm() {
     handleSubmit,
     formState: { errors },
     setError,
+    setValue,
   } = useForm();
 
   const submitForm = async (formData) => {
@@ -42,14 +44,18 @@ export default function LoginForm() {
           });
 
           if (user.role === "admin") {
-            navigate("/dashboard");
+            navigate("/dashboard", {
+              state: { toastMessage: "Loging successfully." },
+            });
           } else {
-            navigate("/");
+            navigate("/", {
+              state: { toastMessage: "Loging successfully." },
+            });
           }
         }
       }
     } catch (error) {
-      console.error(error);
+      toast.error(error.response.data.error);
       setError("root.random", {
         type: "random",
         message: ` User with email ${formData.email} is not found`,
@@ -58,21 +64,49 @@ export default function LoginForm() {
       setLoading(false);
     }
   };
+
+  // Prefill credentials for user login
+  const handleLoginAsUser = () => {
+    setValue("email", "shamim@gmail.com");
+    setValue("password", "naim1234@##");
+  };
+
+  // Prefill credentials for admin login
+  const handleLoginAsAdmin = () => {
+    setValue("email", "kamrul@gmail.com");
+    setValue("password", "naim1234@##");
+  };
+
   return (
     <form onSubmit={handleSubmit(submitForm)}>
-      <Field label=" Enter your username or email address" error={errors.email}>
+      <div className="flex justify-between mb-4">
+        <button
+          type="button"
+          onClick={handleLoginAsUser}
+          className="bg-primary text-white py-2 px-4 rounded-lg hover:bg-gray-400"
+        >
+          Login as User
+        </button>
+        <button
+          type="button"
+          onClick={handleLoginAsAdmin}
+          className="bg-primary text-white py-2 px-4 rounded-lg hover:bg-gray-400"
+        >
+          Login as Admin
+        </button>
+      </div>
+      <Field label=" Enter your email address" error={errors.email}>
         <input
           {...register("email", {
-            required: "Username or Email is Required",
+            required: "Email is Required",
           })}
           type="text"
           id="email"
           className={`w-full px-4 py-3 rounded-lg border border-gray-300 ${
             errors.email ? "border-red-500" : "border-gray-200"
           }`}
-          placeholder="Username or email address"
-          // value="saad@learnwithsumit.com"
-          // value="admin@learnwithsumit.com"
+          placeholder="Email address"
+          autoComplete="email"
         />
       </Field>
 
@@ -80,10 +114,10 @@ export default function LoginForm() {
         <input
           {...register("password", {
             required: "Password is Required",
-            // minLength: {
-            //   value: 8,
-            //   message: "Your password must be at least 8 characters",
-            // },
+            minLength: {
+              value: 8,
+              message: "Your password must be at least 8 characters",
+            },
           })}
           className={`w-full px-4 py-3 rounded-lg border border-gray-300 ${
             errors.password ? "border-red-500" : "border-gray-200"
@@ -91,8 +125,7 @@ export default function LoginForm() {
           type="password"
           id="password"
           placeholder="Password"
-          // value="password123"
-          // value="admin123"
+          autoComplete="current-password"
         />
       </Field>
 

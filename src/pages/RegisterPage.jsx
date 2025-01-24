@@ -4,11 +4,15 @@ import SalyONe from "../assets/Saly-1.png"
 import Logo from "../assets/logo.svg"
 import WhiteLogo from "../assets/logo-white.svg"
 import RegisterForm from "../components/auth/RegisterForm";
+import { ToastContainer } from "react-toastify";
 
 export default function RegisterPage() {
+  
   return (
     <main className="bg-white text-gray-800 ">
+      <ToastContainer position="top-right" autoClose={3000} />
       <div className="flex min-h-screen max-h-screen">
+        
         {/* Left side  */}
         <div className="hidden  lg:flex lg:w-1/2 bg-primary flex-col justify-between p-12  h-full fixed left-0 top-0">
           <div className="text-white">

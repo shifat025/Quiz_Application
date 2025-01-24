@@ -44,8 +44,6 @@ export default function QuizSet() {
         if (updatedQuiz) {
           toast.success("Quiz updated successfully!");
           navigate(-1); // Navigate back after successful update
-        } else {
-          toast.error("Failed to update the quizset.");
         }
       } else {
         // Create new quiz
@@ -57,14 +55,10 @@ export default function QuizSet() {
         if (createdQuiz) {
           toast.success("Quiz created successfully!");
           navigate(`/dashboard/quizentry/${createdQuiz.id}`); // Navigate to new quiz entry page
-        } else {
-          toast.error("Failed to create the quizset.");
         }
       }
     } catch (err) {
-      // console.log("this is component error", err);
-      toast.error("An error occurred. Please try again.");
-      // console.log("This is update error", err.response.data.message);
+      toast.error(err.message || "An error occurred. Please try again.");
     }
   };
 

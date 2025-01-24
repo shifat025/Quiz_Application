@@ -1,11 +1,26 @@
-import { Link } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import SalyOne from "../assets/Saly-1.png"
 import Logo from "../assets/logo.svg"
 import LoginForm from "../components/auth/LoginForm";
+import { toast, ToastContainer } from "react-toastify";
+import { useEffect } from "react";
 
 export default function LoginPage() {
+  const location = useLocation();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    // Check if there's a toast message in the state
+    if (location.state?.toastMessage) {
+      toast.success(location.state.toastMessage);
+
+      // Clear the state after showing the toast to prevent multiple triggers
+      navigate(location.pathname, { replace: true });
+    }
+  }, [location, navigate]);
   return (
     <div className="bg-white text-gray-800 overflow-hidden">
+      <ToastContainer position="top-right" autoClose={3000} />
       <div className="flex min-h-screen">
         {/* Left side  */}
         <div className="hidden lg:flex lg:w-1/2 bg-primary flex-col justify-between p-12 relative">

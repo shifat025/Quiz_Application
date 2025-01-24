@@ -11,13 +11,11 @@ export function CreateUpdateQuestion(quizSetId) {
     try {
       setLoading(true);
       setError(null); // Reset error before request
-      console.log(entryData);
       const response = await api.post(
         `admins/quizsets/${quizSetId}/questions/`,
         entryData
       );
       if (response.status === 201) {
-        console.log(response.data);
         return response.data;
       } else {
         throw new Error("Failed to create question");
@@ -62,7 +60,6 @@ export function CreateUpdateQuestion(quizSetId) {
         throw new Error("Failed to delete question");
       }
     } catch (err) {
-      console.log("delete error",err);
       setError(err.message || "Something went wrong");
       return false;
     } finally {

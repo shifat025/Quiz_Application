@@ -11,10 +11,7 @@ export function QuizSetApi() {
     try {
       setLoading(true);
       setError(null); // Reset error before request
-      const response = await api.post(
-        `/admins/quizsets/create/`,
-        data
-      );
+      const response = await api.post(`/admins/quizsets/create/`, data);
       if (response.status === 201) {
         return response.data;
       } else {
@@ -42,9 +39,10 @@ export function QuizSetApi() {
         throw new Error("Failed to update question set");
       }
     } catch (err) {
-        console.log("this is error",err.response.data.message);
-      setError(err.response.data.message || "Something went wrong");
-      return null;
+      const errorMessage =
+        err.response?.data?.error?.[0] || "Something went wrong";
+      setError(errorMessage);
+      throw new Error(errorMessage);
     } finally {
       setLoading(false);
     }
@@ -54,7 +52,9 @@ export function QuizSetApi() {
     try {
       setLoading(true);
       setError(null); // Reset error before request
-      const response = await api.delete(`/admins/quizsets/${quizSetId}/delete/`);
+      const response = await api.delete(
+        `/admins/quizsets/${quizSetId}/delete/`
+      );
       if (response.status === 204) {
         return true;
       } else {
@@ -68,7 +68,5 @@ export function QuizSetApi() {
     }
   };
 
-
-
-  return { createQuizSet, updateQuizSet,deleteQuestionSet, loading, error };
+  return { createQuizSet, updateQuizSet, deleteQuestionSet, loading, error };
 }

@@ -20,7 +20,6 @@ export const useFetchQuizzes = () => {
         const response = auth?.authToken
           ? await api.get("/user_set/")
           : await baseurl.get("/user_set/");
-        console.log(response);
         if (response.status === 200) {
           setQuizzes(response.data);
         } else {

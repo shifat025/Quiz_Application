@@ -2,10 +2,13 @@ import Cookies from "js-cookie";
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import whiteLogo from "../../../assets/logo-white.svg";
+import useAuth from "../../../hooks/useAuth";
+import avater from "../../../assets/avater.webp"
 
 export default function LeftSide() {
   const [activeLink, setActiveLink] = useState(1);
   const navigate = useNavigate();
+  const {auth} = useAuth()
 
   const handleLinkClick = (index) => {
     setActiveLink(index);
@@ -99,11 +102,11 @@ export default function LeftSide() {
       </nav>
       <div className="mt-auto flex items-center">
         <img
-          src="../assets/avatar.webp"
+          src={avater}
           alt="Mr Hasan"
           className="w-10 h-10 rounded-full mr-3 object-cover"
         />
-        <span className="text-white font-semibold">Saad Hasan</span>
+        <span className="text-white font-semibold">{auth?.user?.full_name}</span>
       </div>
     </aside>
   );

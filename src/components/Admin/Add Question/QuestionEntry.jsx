@@ -60,24 +60,28 @@ export default function QuestionEntry() {
 
         <div className="grid grid-cols-1 lg:grid-cols-2 md:gap-8 lg:gap-12">
           {/* <!-- Left Column --> */}
-          <QuizEntry
-            setQuestions={setQuestions}
-            setIsEdit={setIsEdit}
-            edit={isEdit}
-            selectedQuestion={selectedQuestion}
-            questions={questions}
-          />
+          <div className="lg:sticky lg:top-0 lg:max-h-[calc(100vh-160px)] overflow-y-auto">
+            <QuizEntry
+              setQuestions={setQuestions}
+              setIsEdit={setIsEdit}
+              edit={isEdit}
+              selectedQuestion={selectedQuestion}
+              questions={questions}
+            />
+          </div>
 
           {/* <!-- Right Column --> */}
-          <QuestionList
-            questions={questions}
-            setQuestions={setQuestions}
-            setIsEdit={setIsEdit}
-            edit={isEdit}
-            setSelectedQuestion={setSelectedQuestion}
-            selectedQuestion={selectedQuestion}
-            loading={loading}
-          />
+          <div className="lg:max-h-[calc(100vh-160px)] lg:overflow-y-auto">
+            <QuestionList
+              questions={questions}
+              setQuestions={setQuestions}
+              setIsEdit={setIsEdit}
+              edit={isEdit}
+              setSelectedQuestion={setSelectedQuestion}
+              selectedQuestion={selectedQuestion}
+              loading={loading}
+            />
+          </div>
         </div>
       </div>
     </main>

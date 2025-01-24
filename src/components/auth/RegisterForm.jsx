@@ -1,8 +1,8 @@
-import { useForm } from "react-hook-form";
-import Field from "../common/Field";
-import { api } from "../../api";
 import { useState } from "react";
+import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
+import { api } from "../../api";
+import Field from "../common/Field";
 
 export default function RegisterForm() {
   const {
@@ -21,66 +21,66 @@ export default function RegisterForm() {
         type: "manual",
         message: "Passwords do not match",
       });
-    }
-    if (data.password !== data.confirm_password) {
-      setError("confirm_password", {
-        type: "manual",
-        message: "Passwords do not match",
-      });
     } else {
       const cleanedData = { ...data };
-      delete cleanedData.confirm_password; // Remove confirm_password
-      // Handle role assignment
       if (data.role) {
-        cleanedData.role = "admin";
+        cleanedData.role = true;
       } else {
         delete cleanedData.role; // Remove role if not admin
       }
 
       setLoading(true);
-      
-      try{
-        
-        const response = await api.post("auth/register", cleanedData)
-        
-        if(response.status === 201){
-          alert("Account created successfully!");
-          navigate("/login")
+
+      try {
+        const response = await api.post("/user/register/", cleanedData);
+
+        if (response.status === 201) {
+          navigate("/login", {
+            state: { toastMessage: "Registration successful! Please log in." },
+          });
         }
-      }
-      catch(error){
+      } catch (error) {
         setApiError(
-          error.response?.data?.message ||
+          error.response?.data?.error ||
             "An error occurred while registering. Please try again."
         );
       } finally {
         setLoading(false);
       }
-
     }
   };
 
-  if (loading) {
-    return <div>Loading...</div>;
-  }
 
   return (
     <form className="" onSubmit={handleSubmit(submitForm)}>
       <div className="">
-        <Field label="Full Name" error={errors.full_name}>
+        <Field label="First Name" error={errors.first_name}>
           <input
-            {...register("full_name", {
-              required: "Full Name is required",
+            {...register("first_name", {
+              required: "First Name is required",
             })}
             type="text"
-            id="full_name"
+            id="first_name"
             className={`w-full px-4 py-3 rounded-lg border border-gray-300 ${
-              errors.full_name ? "border-red-500" : "border-gray-200"
+              errors.first_name ? "border-red-500" : "border-gray-200"
             }`}
-            placeholder="John Doe"
+            placeholder="First Name"
           />
         </Field>
-        <Field label="Email" error={errors.username}>
+        <Field label="Last Name" error={errors.last_name}>
+          <input
+            {...register("last_name", {
+              required: "Last Name is required",
+            })}
+            type="text"
+            id="last_name"
+            className={`w-full px-4 py-3 rounded-lg border border-gray-300 ${
+              errors.last_name ? "border-red-500" : "border-gray-200"
+            }`}
+            placeholder="Last Name"
+          />
+        </Field>
+        <Field label="Email" error={errors.email}>
           <input
             {...register("email", {
               required: " Email is Required",
@@ -115,6 +115,7 @@ export default function RegisterForm() {
             type="password"
             id="password"
             placeholder="Password"
+            autoComplete="password"
           />
         </Field>
 
@@ -129,6 +130,7 @@ export default function RegisterForm() {
             type="password"
             id="confirm_password"
             placeholder="Confirm Password"
+            autoComplete="confirm_assword"
           />
         </Field>
       </div>
@@ -149,9 +151,36 @@ export default function RegisterForm() {
 
       <button
         type="submit"
-        className="w-full bg-primary text-white py-3 rounded-lg mb-2"
+        className="w-full bg-primary text-white py-3 rounded-lg mb-4"
+        disabled={loading} // Disable button while loading
       >
-        Create Account
+        {loading ? (
+          <span className="flex items-center justify-center">
+            <svg
+              className="animate-spin h-5 w-5 mr-2 text-white"
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+            >
+              <circle
+                className="opacity-25"
+                cx="12"
+                cy="12"
+                r="10"
+                stroke="currentColor"
+                strokeWidth="4"
+              ></circle>
+              <path
+                className="opacity-75"
+                fill="currentColor"
+                d="M4 12a8 8 0 018-8v8H4z"
+              ></path>
+            </svg>
+            Loading...
+          </span>
+        ) : (
+          "Create Account"
+        )}
       </button>
     </form>
   );

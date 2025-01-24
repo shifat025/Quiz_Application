@@ -7,7 +7,6 @@ export default function QuizBody() {
   const navigate = useNavigate();
   const { quizzes, loading, error } = useFetchQuizzes();
 
-
   const handleQuizClick = (quizId, isAttempted) => {
     if (auth?.authToken) {
       if (isAttempted) {
@@ -15,13 +14,21 @@ export default function QuizBody() {
       } else {
         navigate(`/quiz_page/${quizId}`); // Navigate to QuizPage if not attempted
       }
-
     } else {
       navigate("/login"); // Navigate to Login page if not logged in
     }
   };
 
-  if (loading) return <div>Loading quizzes...</div>;
+  if (loading) {
+    return (
+      <div className="flex justify-center items-center min-h-screen bg-background text-foreground">
+        <div className="relative w-12 h-12">
+          <div className="absolute inset-0 border-4 border-gray-200 rounded-full"></div>
+          <div className="absolute inset-0 border-4 border-t-primary border-r-transparent border-b-transparent border-l-primary rounded-full animate-spin"></div>
+        </div>
+      </div>
+    );
+  }
   if (error) return <div>Error: {error}</div>;
 
   return (
@@ -30,7 +37,7 @@ export default function QuizBody() {
         <a
           className="rounded-lg overflow-hidden shadow-lg hover:shadow-xl transition-shadow max-h-[450px] cursor-pointer group relative"
           key={quiz.id}
-          onClick={() => handleQuizClick(quiz.id,quiz.is_attempted)}
+          onClick={() => handleQuizClick(quiz.id, quiz.is_attempted)}
         >
           <div className="group-hover:scale-105 absolute transition-all text-white  text-center top-1/2 -translate-y-1/2 px-4">
             <h1 className=" text-5xl" style={{ fontFamily: "Jaro" }}>
