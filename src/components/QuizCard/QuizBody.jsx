@@ -47,7 +47,7 @@ export default function QuizBody() {
             </div>
           )}
           <img
-            src={`https://quiz-application-8thb.onrender.com/${quiz.thumbnail}`}
+            src={`https://quiz-application-vzaz.onrender.com/${quiz.thumbnail}`}
             alt="JavaScript Hoisting"
             className="w-full h-full object-cover rounded mb-4 transition-all "
           />
