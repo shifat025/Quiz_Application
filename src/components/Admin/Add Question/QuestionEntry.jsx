@@ -60,7 +60,7 @@ export default function QuestionEntry() {
 
         <div className="grid grid-cols-1 lg:grid-cols-2 md:gap-8 lg:gap-12">
           {/* <!-- Left Column --> */}
-          <div className="lg:sticky lg:top-0 lg:max-h-[calc(100vh-160px)] overflow-y-auto">
+          <div className="lg:sticky lg:top-0 lg:max-h-[calc(100vh-160px)] ">
             <QuizEntry
               setQuestions={setQuestions}
               setIsEdit={setIsEdit}

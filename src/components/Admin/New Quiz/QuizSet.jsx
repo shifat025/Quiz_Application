@@ -54,7 +54,9 @@ export default function QuizSet() {
         });
         if (createdQuiz) {
           toast.success("Quiz created successfully!");
-          navigate(`/dashboard/quizentry/${createdQuiz.id}`); // Navigate to new quiz entry page
+          navigate(`/dashboard/quizentry/${createdQuiz.id}`, {
+            state: { title: title, description: description },
+          }); // Navigate to new quiz entry page
         }
       }
     } catch (err) {
