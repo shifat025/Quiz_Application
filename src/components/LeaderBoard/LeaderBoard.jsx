@@ -76,7 +76,7 @@ export default function LeaderBoard() {
                   alt="Profile Pic"
                   className="w-20 h-20 rounded-full border-4 border-white mb-4 object-cover"
                 />
-                <h2 className="text-2xl font-bold">Saad Hasan</h2>
+                <h2 className="text-2xl font-bold">{user?.full_name}</h2>
                 <p className="text-xl">
                   {userPosition}
                   {getOrdinalSuffix(userPosition)} Position
