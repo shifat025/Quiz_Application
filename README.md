@@ -53,5 +53,7 @@
 
 ### Clone the Repository  
 ```bash  
-git clone <repository-url>  
-cd quiz-application  
+git clone https://github.com/shifat025/Quiz_Application  
+cd Quiz_Application 
+Owner avatar
+Quiz_Application
